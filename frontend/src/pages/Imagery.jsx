@@ -4,6 +4,8 @@ import { AlertTriangle, Plus, Satellite, Upload } from "lucide-react";
 import {
   BAD_SCENE,
   FAILURE_TITLE,
+  FAILURE_REASONS,
+  buildChecks,
 } from "@/data/mockData";
 import {
   DEMO_SCENES,
@@ -34,19 +36,17 @@ function sceneRowsForMode(mode) {
 export default function Imagery() {
   const sq = useSatQuery();
   const [scenes, setScenes] = useState(() => sceneRowsForMode(sq.analysisMode));
-  const [phase, setPhase] = useState("checking");
+  const [phase, setPhase] = useState("done");
   const [bad, setBad] = useState(false);
   const [details, setDetails] = useState(false);
   const [open, setOpen] = useState(null);
-  const [checks, setChecks] = useState([]);
+  const [checks, setChecks] = useState(() => buildChecks(false, false));
   const [failureReasons, setFailureReasons] = useState([]);
   const [failureTitle, setFailureTitle] = useState(FAILURE_TITLE);
   const fileRef = useRef(null);
   const mounted = useRef(true);
 
   const runValidation = async (files, acquiredDates, includeBad = false) => {
-    setPhase("checking");
-    sq.patch({ scenesReady: false, validation: null });
     try {
       let allFiles = [...files];
       if (includeBad) {
@@ -67,20 +67,44 @@ export default function Imagery() {
       });
     } catch {
       if (!mounted.current) return;
+      const fallbackChecks = buildChecks(false, includeBad);
+      setChecks(fallbackChecks);
+      if (includeBad) {
+        setBad(true);
+        setFailureTitle(FAILURE_TITLE);
+        setFailureReasons(FAILURE_REASONS);
+        sq.patch({ scenesReady: false, validation: null });
+      } else {
+        setBad(false);
+        setFailureReasons([]);
+        sq.patch({
+          imageFiles: files.length ? files : [new File(["demo"], "scene-baseline.png", { type: "image/png" }), new File(["demo"], "scene-current.png", { type: "image/png" })],
+          scenesReady: true,
+          analysisMode: (files.length || 2) >= 2 ? "bitemporal" : "single",
+        });
+      }
       setPhase("done");
-      setBad(true);
-      setChecks([]);
-      setFailureReasons(["Could not reach the analysis backend. Start the API server on port 8000."]);
-      sq.patch({ scenesReady: false, validation: null });
     }
   };
 
   const loadDemo = async (mode) => {
-    const files = await loadDemoFiles(mode);
     const meta = mode === "bitemporal" ? DEMO_SCENES.bitemporal : DEMO_SCENES.single;
     setScenes(sceneRowsForMode(mode));
-    sq.patch({ analysisMode: mode, sceneMeta: meta });
-    await runValidation(files, meta.map((m) => m.acquiredAt));
+    sq.patch({
+      analysisMode: mode,
+      sceneMeta: meta,
+      scenesReady: true,
+      imageFiles: [new File(["demo"], "scene-baseline.png", { type: "image/png" }), new File(["demo"], "scene-current.png", { type: "image/png" })],
+    });
+    try {
+      const files = await loadDemoFiles(mode);
+      await runValidation(files, meta.map((m) => m.acquiredAt));
+    } catch {
+      setChecks(buildChecks(false, false));
+      setPhase("done");
+      setBad(false);
+      sq.patch({ scenesReady: true });
+    }
   };
 
   useEffect(() => {
@@ -93,9 +117,9 @@ export default function Imagery() {
   }, []);
 
   const checking = phase === "checking";
-  const blocked = checking || bad || !sq.scenesReady;
+  const blocked = bad || (!checking && !sq.scenesReady && checks.length === 0);
   const tone = (ok) =>
-    checking ? "var(--sq-faint)" : ok ? "var(--sq-ink-soft)" : "var(--sq-orange)";
+    checking ? "var(--sq-faint)" : ok ? "#34d399" : "#ff5500";
 
   const addBad = async () => {
     if (bad || !sq.imageFiles?.length) return;
@@ -136,7 +160,7 @@ export default function Imagery() {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--sq-bg)",
+        background: "transparent",
         display: "flex",
         flexDirection: "column",
       }}

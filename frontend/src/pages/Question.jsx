@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { PROMPTS } from "@/data/mockData";
+import { PROMPTS, interpretTokens } from "@/data/mockData";
 import { previewPlan, startAnalysis } from "@/lib/api";
 import { TopNav } from "@/components/TopNav";
 import { Pill } from "@/components/Pill";
@@ -37,13 +37,17 @@ export default function Question() {
         if (plan.task_plan) sq.patch({ taskPlan: plan.task_plan });
       })
       .catch(() => {
-        if (!cancelled) {
-          setInterpretation(
-            imageCount >= 2
-              ? "Compare July against the June baseline, across both sensors, and report the decline by parcel."
-              : "Describe land use and notable features in the uploaded scene.",
-          );
-        }
+        if (cancelled) return;
+        const fallbackTokens = interpretTokens(q);
+        setTokens(fallbackTokens);
+        setInterpretation(
+          imageCount >= 2
+            ? "Compare July against the June baseline, across both sensors, and report the decline by parcel."
+            : "Describe land use and notable features in the uploaded scene.",
+        );
+        setReasoning(
+          "Radar carries the comparison where cloud blocks the optical scene. The two readings are checked against each other; disagreement lowers the confidence rather than being hidden.",
+        );
       });
     return () => {
       cancelled = true;
@@ -76,8 +80,8 @@ export default function Question() {
       setJobId(job_id);
       sq.patch({ jobId: job_id });
     } catch {
+      // Backend offline → run the mock pipeline animation (no jobId)
       setJobId(null);
-      setRunning(true);
     }
   };
 
@@ -85,7 +89,7 @@ export default function Question() {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--sq-bg)",
+        background: "transparent",
         display: "flex",
         flexDirection: "column",
       }}
@@ -110,19 +114,21 @@ export default function Question() {
         <textarea
           value={sq.query}
           onChange={(e) => sq.patch({ query: e.target.value })}
-          placeholder="Write it as you would to a colleague"
+          placeholder="Write it as you would to a colleague (e.g. Has the paddy in this block declined since June?)"
           aria-label="Your question"
           style={{
             fontFamily: "inherit",
             fontSize: 20,
-            lineHeight: 1.35,
+            lineHeight: 1.4,
             color: "var(--sq-ink)",
-            background: "var(--sq-bg)",
-            border: "1px solid var(--sq-rule)",
+            background: "rgba(15, 23, 42, 0.65)",
+            border: "1px solid var(--sq-rule-strong)",
             borderRadius: 20,
             padding: 24,
             minHeight: 120,
             resize: "vertical",
+            backdropFilter: "blur(12px)",
+            boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3)",
           }}
         />
 
@@ -140,7 +146,7 @@ export default function Question() {
         </div>
 
         <div
-          className="sq-panel"
+          className="sq-panel sq-glow-border"
           style={{
             padding: 32,
             display: "flex",
@@ -154,20 +160,22 @@ export default function Question() {
                 key={t}
                 className="sq-mono"
                 style={{
-                  color: "var(--sq-ink-soft)",
-                  background: "var(--sq-rule)",
+                  color: "#38bdf8",
+                  background: "rgba(56, 189, 248, 0.12)",
+                  border: "1px solid rgba(56, 189, 248, 0.3)",
                   padding: "3px 12px",
                   borderRadius: 9999,
+                  fontSize: 12,
                 }}
               >
                 {t}
               </span>
             ))}
           </div>
-          <span className="sq-mono" style={{ color: "var(--sq-faint)" }}>
-            Interpreted as
+          <span className="sq-mono" style={{ color: "var(--sq-faint)", fontSize: 11 }}>
+            Agent Interpretation Plan
           </span>
-          <span style={{ fontSize: 20, lineHeight: 1.35, textWrap: "pretty" }}>
+          <span style={{ fontSize: 19, lineHeight: 1.35, textWrap: "pretty", color: "var(--sq-ink)", fontWeight: 500 }}>
             {ready ? interpretation : "Waiting for a question."}
           </span>
           <span

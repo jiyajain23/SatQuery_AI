@@ -18,6 +18,14 @@ export default defineConfig({
         "/api": {
           target: "http://localhost:8000",
           changeOrigin: true,
+          configure: (proxy) => {
+            proxy.on("error", (_err, _req, res) => {
+              if (res && "writeHead" in res && !res.headersSent) {
+                res.writeHead(503, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "Backend server offline (running in prototype demo mode)" }));
+              }
+            });
+          },
         },
       },
     },

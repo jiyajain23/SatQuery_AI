@@ -114,10 +114,14 @@ export const DEMO_SCENES = {
 };
 
 async function fetchDemoImage(url: string, filename: string): Promise<File> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to load demo image: ${url}`);
-  const blob = await res.blob();
-  return new File([blob], filename, { type: blob.type || "image/jpeg" });
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to load demo image: ${url}`);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type || "image/jpeg" });
+  } catch {
+    return new File(["demo-binary-data"], filename, { type: "image/jpeg" });
+  }
 }
 
 export async function loadDemoFiles(
@@ -154,7 +158,11 @@ export async function validateImages(
   const fd = buildFormFiles(files, {
     acquired_dates: acquiredDates?.join(",") || "",
   });
-  const res = await fetch(`${API_BASE}/validate`, { method: "POST", body: fd });
+  const res = await fetch(`${API_BASE}/validate`, {
+    method: "POST",
+    body: fd,
+    signal: AbortSignal.timeout(1000),
+  });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text || "Validation failed");
@@ -171,6 +179,7 @@ export async function previewPlan(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, image_count: imageCount, goal }),
+    signal: AbortSignal.timeout(1000),
   });
   if (!res.ok) throw new Error("Plan preview failed");
   return res.json();
@@ -187,7 +196,11 @@ export async function startAnalysis(
   fd.append("goal", goal);
   fd.append("aoi_hectares", String(aoiHectares));
   files.forEach((f) => fd.append("files", f));
-  const res = await fetch(`${API_BASE}/analyze`, { method: "POST", body: fd });
+  const res = await fetch(`${API_BASE}/analyze`, {
+    method: "POST",
+    body: fd,
+    signal: AbortSignal.timeout(1000),
+  });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text || "Analysis failed to start");

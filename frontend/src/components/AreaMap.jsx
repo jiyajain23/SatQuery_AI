@@ -27,6 +27,17 @@ export function AreaMap({ cx, cy, size, note, onPick, children }) {
         cursor: "crosshair",
       }}
     >
+      <img
+        src="/demo/satellite_hero.jpg"
+        alt="Satellite map view"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
       <div
         style={{
           position: "absolute",
@@ -34,9 +45,10 @@ export function AreaMap({ cx, cy, size, note, onPick, children }) {
           top: `${clamp(cy) - half}%`,
           width: `${size}%`,
           height: `${size}%`,
-          border: "1.5px solid var(--sq-violet)",
+          border: "2px solid rgba(99, 102, 241, 0.8)",
           borderRadius: 4,
-          background: "rgba(4,71,255,0.06)",
+          background: "rgba(99, 102, 241, 0.12)",
+          boxShadow: "0 0 20px rgba(99, 102, 241, 0.3)",
           transition:
             "left 0.15s ease, top 0.15s ease, width 0.15s ease, height 0.15s ease",
         }}
@@ -51,8 +63,10 @@ export function AreaMap({ cx, cy, size, note, onPick, children }) {
           gap: 8,
           fontSize: 14,
           letterSpacing: "0.14px",
-          color: "var(--sq-ink-soft)",
-          background: "rgba(253,252,252,0.86)",
+          color: "#e2e8f0",
+          background: "rgba(15, 23, 42, 0.8)",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255, 255, 255, 0.15)",
           padding: "4px 12px",
           borderRadius: 9999,
         }}

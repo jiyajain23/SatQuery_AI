@@ -73,8 +73,22 @@ export function ImageryCanvas({
           minHeight: 320,
           borderRadius: 24,
           overflow: "hidden",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
         }}
       >
+        <img
+          src="/demo/satellite_hero.jpg"
+          alt="Current satellite scene"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            filter: "brightness(0.95) saturate(1.1)",
+          }}
+        />
         <div
           className="sq-scene sq-scene--baseline"
           style={{
@@ -83,19 +97,34 @@ export function ImageryCanvas({
             clipPath: `inset(0 ${100 - swipe}% 0 0)`,
           }}
         >
+          <img
+            src="/demo/satellite_hero.jpg"
+            alt="Baseline satellite scene"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "brightness(1.1) saturate(1.3) hue-rotate(10deg)",
+            }}
+          />
           <span
             className="sq-mono"
             style={{
               position: "absolute",
               left: 20,
               top: 16,
-              color: "var(--sq-ink-soft)",
-              background: "rgba(253,252,252,0.86)",
-              padding: "3px 10px",
+              color: "#93c5fd",
+              background: "rgba(15, 23, 42, 0.85)",
+              border: "1px solid rgba(147, 197, 253, 0.3)",
+              padding: "4px 12px",
               borderRadius: 9999,
+              backdropFilter: "blur(8px)",
+              fontSize: 12,
             }}
           >
-            2 June
+            T₁ · 2 June 2026 (Baseline)
           </span>
         </div>
 
@@ -108,9 +137,10 @@ export function ImageryCanvas({
               width: "56%",
               height: "54%",
               borderRadius: "44% 56% 46% 60%",
-              background: "rgba(253,252,252,0.72)",
-              border: "1px dashed var(--sq-faint)",
+              background: "rgba(255, 255, 255, 0.25)",
+              border: "1.5px dashed rgba(255, 255, 255, 0.6)",
               clipPath: `inset(0 0 0 ${Math.max(0, (swipe - 6) / 0.56)}%)`,
+              backdropFilter: "blur(2px)",
             }}
           />
         )}
@@ -125,8 +155,10 @@ export function ImageryCanvas({
             left: `${swipe}%`,
             top: 0,
             bottom: 0,
-            width: 1,
-            background: "var(--sq-ink)",
+            width: 2,
+            background: "var(--sq-cyan)",
+            boxShadow: "0 0 16px var(--sq-cyan)",
+            zIndex: 10,
           }}
         />
         <span
@@ -135,13 +167,16 @@ export function ImageryCanvas({
             position: "absolute",
             right: 20,
             top: 16,
-            color: "var(--sq-ink-soft)",
-            background: "rgba(253,252,252,0.86)",
-            padding: "3px 10px",
+            color: "#67e8f9",
+            background: "rgba(15, 23, 42, 0.85)",
+            border: "1px solid rgba(103, 232, 249, 0.3)",
+            padding: "4px 12px",
             borderRadius: 9999,
+            backdropFilter: "blur(8px)",
+            fontSize: 12,
           }}
         >
-          14 July
+          T₂ · 14 July 2026 (Current)
         </span>
 
         {regions.map((r) => (
@@ -155,11 +190,12 @@ export function ImageryCanvas({
               top: r.top,
               width: r.w,
               height: r.h,
-              border: `1.5px solid ${r.tone}`,
-              borderRadius: 4,
-              background: hover === r.id ? "rgba(255,71,4,0.22)" : r.fill,
-              cursor: "default",
-              transition: "background 0.15s ease",
+              border: `2px solid ${r.tone}`,
+              borderRadius: 6,
+              background: hover === r.id ? "rgba(255,85,0,0.3)" : r.fill,
+              boxShadow: `0 0 16px ${r.tone}40`,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
             }}
           >
             <span
@@ -170,10 +206,13 @@ export function ImageryCanvas({
                 right: r.side === "right" ? 0 : "auto",
                 top: -24,
                 whiteSpace: "nowrap",
-                color: r.tone,
-                background: "var(--sq-bg)",
-                padding: "1px 6px",
+                color: "#ffffff",
+                background: "rgba(15, 23, 42, 0.9)",
+                border: `1px solid ${r.tone}`,
+                padding: "2px 8px",
                 borderRadius: 9999,
+                fontSize: 11,
+                fontWeight: 600,
               }}
             >
               {r.label}
@@ -194,8 +233,9 @@ export function ImageryCanvas({
             right: 20,
             bottom: 52,
             width: "auto",
-            accentColor: "#000",
+            accentColor: "#00f0ff",
             cursor: "ew-resize",
+            zIndex: 15,
           }}
         />
 
@@ -205,20 +245,22 @@ export function ImageryCanvas({
               position: "absolute",
               right: 20,
               bottom: 52,
-              background: "var(--sq-bg)",
+              background: "rgba(15, 23, 42, 0.95)",
+              border: "1px solid rgba(255, 85, 0, 0.4)",
               borderRadius: 16,
               padding: "16px 20px",
               display: "flex",
               flexDirection: "column",
               gap: 4,
-              boxShadow:
-                "rgba(0,0,0,0.4) 0px 0px 1px 0px, rgba(0,0,0,0.04) 0px 2px 4px 0px",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 85, 0, 0.2)",
+              backdropFilter: "blur(12px)",
+              zIndex: 20,
             }}
           >
-            <span style={{ fontSize: 16, letterSpacing: "0.16px" }}>
+            <span style={{ fontSize: 16, letterSpacing: "0.16px", color: "var(--sq-ink)", fontWeight: 600 }}>
               Parcel {hovered.id} · {hovered.ha}
             </span>
-            <span className="sq-mono" style={{ color: "var(--sq-muted)" }}>
+            <span className="sq-mono" style={{ color: "#38bdf8", fontSize: 12 }}>
               {hovered.drop}
             </span>
           </div>
@@ -231,14 +273,16 @@ export function ImageryCanvas({
               inset: 0,
               display: "grid",
               placeItems: "center",
-              background: "rgba(253,252,252,0.6)",
+              background: "rgba(7, 9, 14, 0.75)",
+              backdropFilter: "blur(8px)",
+              zIndex: 25,
             }}
           >
             <span
               className="sq-mono sq-pulse"
-              style={{ color: "var(--sq-muted)" }}
+              style={{ color: "var(--sq-cyan)", fontSize: 14, fontWeight: 600 }}
             >
-              analysing…
+              FUSING CHANNELS & EXTRACTING EVIDENCE…
             </span>
           </div>
         )}
@@ -250,9 +294,12 @@ export function ImageryCanvas({
             left: 20,
             bottom: 16,
             color: "var(--sq-ink-soft)",
-            background: "rgba(253,252,252,0.86)",
-            padding: "3px 10px",
+            background: "rgba(15, 23, 42, 0.85)",
+            border: "1px solid var(--sq-rule)",
+            padding: "4px 12px",
             borderRadius: 9999,
+            backdropFilter: "blur(8px)",
+            fontSize: 12,
           }}
         >
           {caption}

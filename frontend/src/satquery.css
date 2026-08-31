@@ -1,28 +1,46 @@
 /*
- * SatQuery — design tokens and shared component classes.
- * Values are lifted verbatim from the original HTML mockups so the React
- * build stays visually identical.
+ * SatQuery AI — Deep Space Intelligence Design System
+ * Sleek, dark-mode geospatial theme with glassmorphism, glowing micro-animations,
+ * and high-contrast telemetry accents.
  */
 
 :root {
-  --sq-bg: #fdfcfc;
-  --sq-ink: #000;
-  --sq-ink-soft: #44403b;
-  --sq-muted: #777169;
-  --sq-faint: #a59f97;
-  --sq-rule: #ebe8e4;
-  --sq-rule-strong: #e5e5e5;
-  --sq-panel: #f5f3f1;
-  --sq-hatch-dark: #e0dcd6;
-  --sq-disabled: #d6d1ca;
-  --sq-violet: #0447ff;
-  --sq-orange: #ff4704;
-  --sq-mono: "JetBrains Mono", ui-monospace, monospace;
-  --sq-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --sq-bg: #07090e;
+  --sq-bg-subtle: #0d121d;
+  --sq-ink: #f8fafc;
+  --sq-ink-soft: #cbd5e1;
+  --sq-muted: #94a3b8;
+  --sq-faint: #64748b;
+  --sq-rule: rgba(255, 255, 255, 0.08);
+  --sq-rule-strong: rgba(255, 255, 255, 0.16);
+  --sq-panel: rgba(15, 23, 42, 0.75);
+  --sq-panel-elevated: rgba(22, 33, 58, 0.85);
+  --sq-hatch-dark: #111827;
+  --sq-disabled: #334155;
+  --sq-violet: #6366f1;
+  --sq-cyan: #00f0ff;
+  --sq-emerald: #10b981;
+  --sq-orange: #ff5500;
+  --sq-glow: rgba(0, 240, 255, 0.15);
+  --sq-mono: "JetBrains Mono", ui-monospace, "Fira Code", monospace;
+  --sq-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background-color: var(--sq-bg);
+  color: var(--sq-ink);
+  font-family: var(--sq-sans);
+  margin: 0;
+  padding: 0;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(0, 240, 255, 0.10) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.5) 0px, transparent 100%);
+  background-attachment: fixed;
 }
 
 .sq-app {
-  background: var(--sq-bg);
+  background: transparent;
   color: var(--sq-ink);
   font-family: var(--sq-sans);
   font-size: 16px;
@@ -32,9 +50,10 @@
 
 .sq-app a {
   color: var(--sq-ink);
+  transition: color 0.15s ease;
 }
 .sq-app a:hover {
-  color: var(--sq-ink-soft);
+  color: var(--sq-cyan);
 }
 .sq-app input::placeholder,
 .sq-app textarea::placeholder {
@@ -46,6 +65,21 @@
   font-family: var(--sq-mono);
   font-size: 13px;
   line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+/* — glassmorphism panel — */
+.sq-panel {
+  background: var(--sq-panel);
+  border: 1px solid var(--sq-rule);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.sq-panel:hover {
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 /* — pill buttons / links — */
@@ -61,31 +95,48 @@
   text-decoration: none;
   border-radius: 9999px;
   padding: 9px 18px;
-  background: var(--sq-bg);
+  background: rgba(30, 41, 59, 0.7);
   color: var(--sq-ink);
   border: 1px solid var(--sq-rule-strong);
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sq-pill:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.sq-pill:active {
+  transform: translateY(0);
 }
 .sq-pill--solid {
-  background: var(--sq-ink);
-  color: var(--sq-bg);
-  border-color: var(--sq-ink);
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
 }
 .sq-pill--solid:hover {
-  color: var(--sq-bg);
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+.sq-pill--selected {
+  background: rgba(99, 102, 241, 0.25) !important;
+  color: #93c5fd !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
 }
 .sq-pill--outline:hover {
-  background: var(--sq-panel);
+  background: var(--sq-panel-elevated);
 }
 .sq-pill--lg {
-  padding: 11px 20px;
+  padding: 11px 22px;
+  font-size: 15px;
 }
 .sq-pill--sm {
   padding: 5px 14px;
+  font-size: 13px;
 }
 .sq-pill--nav {
   padding: 7px 14px;
@@ -94,11 +145,11 @@
   background: transparent;
 }
 .sq-pill--nav:hover {
-  background: var(--sq-panel);
+  background: rgba(255, 255, 255, 0.06);
 }
 .sq-pill[aria-disabled="true"] {
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 /* — link buttons — */
@@ -109,72 +160,85 @@
   font-weight: 500;
   letter-spacing: 0.01em;
   background: transparent;
-  color: var(--sq-muted);
+  color: var(--sq-cyan);
   border: none;
   padding: 0;
   text-decoration: underline;
   text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.sq-linkbtn:hover {
+  color: #67e8f9;
 }
 
-/* — inputs — */
+/* — inputs & textareas — */
 .sq-input {
   font-family: inherit;
   font-size: 16px;
   letter-spacing: 0.16px;
   color: var(--sq-ink);
-  background: var(--sq-bg);
-  border: 1px solid var(--sq-rule);
-  border-radius: 4px;
-  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--sq-rule-strong);
+  border-radius: 8px;
+  padding: 12px 16px;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+.sq-input:focus {
+  outline: none;
+  border-color: var(--sq-cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
 }
 .sq-input--round {
   border-radius: 9999px;
-  padding: 12px 20px;
+  padding: 12px 22px;
 }
 
 /* — hatched imagery grounds (stand-in satellite scenes) — */
 .sq-hatch {
   background: repeating-linear-gradient(
     38deg,
-    var(--sq-panel) 0 10px,
-    var(--sq-rule) 10px 20px
+    rgba(15, 23, 42, 0.9) 0 10px,
+    rgba(30, 41, 59, 0.9) 10px 20px
   );
 }
 .sq-hatch--deep {
   background: repeating-linear-gradient(
     38deg,
-    var(--sq-rule) 0 10px,
-    var(--sq-hatch-dark) 10px 20px
+    rgba(10, 15, 30, 0.95) 0 10px,
+    rgba(20, 30, 50, 0.95) 10px 20px
   );
 }
 .sq-hatch--fine {
   background: repeating-linear-gradient(
     38deg,
-    var(--sq-rule) 0 9px,
-    var(--sq-hatch-dark) 9px 18px
+    rgba(15, 23, 42, 0.9) 0 9px,
+    rgba(30, 41, 59, 0.9) 9px 18px
   );
 }
 .sq-hatch--thumb {
   background: repeating-linear-gradient(
     38deg,
-    var(--sq-rule) 0 5px,
-    var(--sq-hatch-dark) 5px 10px
+    rgba(15, 23, 42, 0.9) 0 5px,
+    rgba(30, 41, 59, 0.9) 5px 10px
   );
 }
 .sq-radar-wash {
   background: repeating-linear-gradient(
     96deg,
-    rgba(4, 71, 255, 0.07) 0 2px,
+    rgba(0, 240, 255, 0.08) 0 2px,
     transparent 2px 6px
   );
+  pointer-events: none;
 }
 
 /* — real satellite scenes (InSAR rate maps supplied with the project) — */
 .sq-scene {
-  background-color: var(--sq-panel);
+  background-color: #0b1120;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  border: 1px solid var(--sq-rule-strong);
 }
 .sq-scene--current {
   background-image: url("/demo/scene-current.png");
@@ -183,50 +247,91 @@
   background-image: url("/demo/scene-baseline.png");
 }
 
-/* — panels — */
-.sq-panel {
-  background: var(--sq-panel);
-  border-radius: 20px;
-}
-
 /* — headings — */
 .sq-h1 {
-  font-weight: 300;
-  font-size: 48px;
-  line-height: 1.08;
-  letter-spacing: -0.96px;
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1.06;
+  letter-spacing: -1.2px;
   margin: 0;
   text-wrap: balance;
+  background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .sq-h2 {
-  font-weight: 300;
-  font-size: 36px;
-  line-height: 1.17;
-  letter-spacing: -0.72px;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
   margin: 0;
+  background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .sq-h3 {
-  font-weight: 300;
-  font-size: 32px;
-  line-height: 1.13;
-  letter-spacing: -0.64px;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
   margin: 0;
+  color: var(--sq-ink);
+}
+
+/* — tool registry badges — */
+.sq-tool-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--sq-mono);
+  border: 1px solid var(--sq-rule);
+  transition: all 0.2s ease;
+}
+.sq-tool-tag--selected {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}
+.sq-tool-tag--skipped {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* — glowing gradient border — */
+.sq-glow-border {
+  position: relative;
+}
+.sq-glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(99, 102, 241, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* — animations — */
 @keyframes sqPulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.3; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes sqGlowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 240, 255, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); }
 }
 @keyframes sqIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -234,10 +339,13 @@
   }
 }
 .sq-pulse {
-  animation: sqPulse 1s ease-in-out infinite;
+  animation: sqPulse 1.2s ease-in-out infinite;
+}
+.sq-glow-pulse {
+  animation: sqGlowPulse 2s ease-in-out infinite;
 }
 .sq-in {
-  animation: sqIn 0.35s ease both;
+  animation: sqIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes sqSpin {
   to {
@@ -248,7 +356,23 @@
   animation: sqSpin 1s linear infinite;
 }
 
-/* — responsive: tablet / laptop — */
+/* — scrollbars — */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--sq-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* — responsive — */
 @media (max-width: 1100px) {
   .sq-home-hero,
   .sq-home-steps {

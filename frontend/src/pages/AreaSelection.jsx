@@ -14,7 +14,7 @@ export default function AreaSelection() {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--sq-bg)",
+        background: "transparent",
         display: "flex",
         flexDirection: "column",
       }}
