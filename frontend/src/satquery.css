@@ -1,0 +1,292 @@
+/*
+ * SatQuery — design tokens and shared component classes.
+ * Values are lifted verbatim from the original HTML mockups so the React
+ * build stays visually identical.
+ */
+
+:root {
+  --sq-bg: #fdfcfc;
+  --sq-ink: #000;
+  --sq-ink-soft: #44403b;
+  --sq-muted: #777169;
+  --sq-faint: #a59f97;
+  --sq-rule: #ebe8e4;
+  --sq-rule-strong: #e5e5e5;
+  --sq-panel: #f5f3f1;
+  --sq-hatch-dark: #e0dcd6;
+  --sq-disabled: #d6d1ca;
+  --sq-violet: #0447ff;
+  --sq-orange: #ff4704;
+  --sq-mono: "JetBrains Mono", ui-monospace, monospace;
+  --sq-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+.sq-app {
+  background: var(--sq-bg);
+  color: var(--sq-ink);
+  font-family: var(--sq-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sq-app a {
+  color: var(--sq-ink);
+}
+.sq-app a:hover {
+  color: var(--sq-ink-soft);
+}
+.sq-app input::placeholder,
+.sq-app textarea::placeholder {
+  color: var(--sq-faint);
+}
+
+/* — mono type — */
+.sq-mono {
+  font-family: var(--sq-mono);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* — pill buttons / links — */
+.sq-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border-radius: 9999px;
+  padding: 9px 18px;
+  background: var(--sq-bg);
+  color: var(--sq-ink);
+  border: 1px solid var(--sq-rule-strong);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.sq-pill--solid {
+  background: var(--sq-ink);
+  color: var(--sq-bg);
+  border-color: var(--sq-ink);
+}
+.sq-pill--solid:hover {
+  color: var(--sq-bg);
+  background: #1a1a1a;
+}
+.sq-pill--outline:hover {
+  background: var(--sq-panel);
+}
+.sq-pill--lg {
+  padding: 11px 20px;
+}
+.sq-pill--sm {
+  padding: 5px 14px;
+}
+.sq-pill--nav {
+  padding: 7px 14px;
+  font-weight: 400;
+  border-color: transparent;
+  background: transparent;
+}
+.sq-pill--nav:hover {
+  background: var(--sq-panel);
+}
+.sq-pill[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* — link buttons — */
+.sq-linkbtn {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background: transparent;
+  color: var(--sq-muted);
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* — inputs — */
+.sq-input {
+  font-family: inherit;
+  font-size: 16px;
+  letter-spacing: 0.16px;
+  color: var(--sq-ink);
+  background: var(--sq-bg);
+  border: 1px solid var(--sq-rule);
+  border-radius: 4px;
+  padding: 12px 14px;
+}
+.sq-input--round {
+  border-radius: 9999px;
+  padding: 12px 20px;
+}
+
+/* — hatched imagery grounds (stand-in satellite scenes) — */
+.sq-hatch {
+  background: repeating-linear-gradient(
+    38deg,
+    var(--sq-panel) 0 10px,
+    var(--sq-rule) 10px 20px
+  );
+}
+.sq-hatch--deep {
+  background: repeating-linear-gradient(
+    38deg,
+    var(--sq-rule) 0 10px,
+    var(--sq-hatch-dark) 10px 20px
+  );
+}
+.sq-hatch--fine {
+  background: repeating-linear-gradient(
+    38deg,
+    var(--sq-rule) 0 9px,
+    var(--sq-hatch-dark) 9px 18px
+  );
+}
+.sq-hatch--thumb {
+  background: repeating-linear-gradient(
+    38deg,
+    var(--sq-rule) 0 5px,
+    var(--sq-hatch-dark) 5px 10px
+  );
+}
+.sq-radar-wash {
+  background: repeating-linear-gradient(
+    96deg,
+    rgba(4, 71, 255, 0.07) 0 2px,
+    transparent 2px 6px
+  );
+}
+
+/* — real satellite scenes (InSAR rate maps supplied with the project) — */
+.sq-scene {
+  background-color: var(--sq-panel);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.sq-scene--current {
+  background-image: url("/demo/scene-current.png");
+}
+.sq-scene--baseline {
+  background-image: url("/demo/scene-baseline.png");
+}
+
+/* — panels — */
+.sq-panel {
+  background: var(--sq-panel);
+  border-radius: 20px;
+}
+
+/* — headings — */
+.sq-h1 {
+  font-weight: 300;
+  font-size: 48px;
+  line-height: 1.08;
+  letter-spacing: -0.96px;
+  margin: 0;
+  text-wrap: balance;
+}
+.sq-h2 {
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 1.17;
+  letter-spacing: -0.72px;
+  margin: 0;
+}
+.sq-h3 {
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 1.13;
+  letter-spacing: -0.64px;
+  margin: 0;
+}
+
+/* — animations — */
+@keyframes sqPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes sqIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.sq-pulse {
+  animation: sqPulse 1s ease-in-out infinite;
+}
+.sq-in {
+  animation: sqIn 0.35s ease both;
+}
+@keyframes sqSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.sq-spin {
+  animation: sqSpin 1s linear infinite;
+}
+
+/* — responsive: tablet / laptop — */
+@media (max-width: 1100px) {
+  .sq-home-hero,
+  .sq-home-steps {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .sq-home-steps {
+    gap: 24px !important;
+  }
+  .sq-examples {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .sq-results-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .sq-pad {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .sq-h1 {
+    font-size: 36px;
+    letter-spacing: -0.72px;
+  }
+  .sq-h2 {
+    font-size: 30px;
+  }
+  .sq-examples,
+  .sq-home-steps {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .sq-pad {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .sq-stepnav {
+    display: none !important;
+  }
+}
